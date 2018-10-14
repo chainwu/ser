@@ -25,13 +25,17 @@ image_input_files = sorted(glob.glob(path.join(IMAGE_PATH, '*.jpg')))
 for image_path in image_input_files:
    images = imageio.imread(image_path)
    
-images = np.asarray(images)   
-image_size = np.asarray([images.shape[1], images.shape[2], images.shape[3]])
-print(images_size)
+images = np.asarray(images)
+#images = images[..., None]
+#image_size = np.asarray([images.shape[0], images.shape[1], images.shape[2]])
+n_images = len(image_input_files)
+
+labels = np.zeros(n_images)
+images = images.reshape(-1,180,1500,3)
+#images = np.expand_dims(images,axis=0)
+#print(image_size)
 images = images/256
 
-n_images = len(image_input_files)
-labels = np.zeros(n_images)
 for i in range(1, n_images):
      labels[i] = int(i / 3)
 
@@ -46,8 +50,9 @@ for i in range(1, n_images):
 # test_indices = shuffled_indices[split_index:]
 
 train_indices=n_images-1
-x_train = images[train_indices]
-y_train = labels[train_indices]
+
+x_train = images[:]
+y_train = labels[:]
 # x_test = images[test_indices, :, :]
 # y_test = labels[test_indices]
 
@@ -94,7 +99,7 @@ y_train = labels[train_indices]
 model = Sequential()
 
 # 1st layer
-model.add(Conv2D(filters = 64, kernel_size = (5,5), strides = (3,3), padding = 'same', input_shape = (1500,180,3), activation = 'relu'))
+model.add(Conv2D(filters = 64, kernel_size = (5,5), strides = (3,3), padding = 'same', input_shape = (180,1500,3), activation = 'relu'))
 model.add(MaxPooling2D(pool_size=(3,3)))
 model.add(Dropout(0.2))
 
