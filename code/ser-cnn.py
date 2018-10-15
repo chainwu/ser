@@ -5,7 +5,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.optimizers import SGD
-from keras.utils import plot_model
+from keras.utils import plot_model, to_categorical
 from keras.callbacks import EarlyStopping, TensorBoard
 from sklearn.metrics import accuracy_score, f1_score
 
@@ -39,6 +39,10 @@ images = images/256
 for i in range(1, n_images):
      labels[i] = int(i / 3)
 
+#labels=array(labels)
+labels_encoded=to_categorical(labels)
+print(labels_encoded)
+
 # # Training set processing
 # # Split into test and training sets
 # TRAIN_TEST_SPLIT = 0.3
@@ -52,7 +56,7 @@ for i in range(1, n_images):
 train_indices=n_images-1
 
 x_train = images[:]
-y_train = labels[:]
+y_train = labels_encoded[:]
 # x_test = images[test_indices, :, :]
 # y_test = labels[test_indices]
 
@@ -143,7 +147,7 @@ tensorboard = TensorBoard(log_dir=log_dir, write_graph=True, write_images=True)
 callbacks = [early_stopping, tensorboard]
 
 # Train the model
-model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, callbacks=callbacks, verbose=1)
+model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1)
 
 # #-------- Testing on data ---
 # # Make a prediction on the test set
