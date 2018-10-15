@@ -22,16 +22,19 @@ IMAGE_PATH='../test-images'
 NUM_EMOTION=5
 
 image_input_files = sorted(glob.glob(path.join(IMAGE_PATH, '*.jpg')))
-for image_path in image_input_files:
-   images = imageio.imread(image_path)
-   
+images = [imageio.imread(im) for im in image_input_files]
+
+#m = np.array(images)
+#print(m.shape)
+
 images = np.asarray(images)
 #images = images[..., None]
-#image_size = np.asarray([images.shape[0], images.shape[1], images.shape[2]])
 n_images = len(image_input_files)
 
 labels = np.zeros(n_images)
-images = images.reshape(-1,180,1500,3)
+#images = images.reshape(,180,1500,3)
+image_size = np.asarray([images.shape[0], images.shape[1], images.shape[2], images.shape[3]])
+print(image_size)
 #images = np.expand_dims(images,axis=0)
 #print(image_size)
 images = images/256
@@ -130,8 +133,8 @@ model.summary()
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-BATCH_SIZE=100
-EPOCHS= 100
+BATCH_SIZE=1000
+EPOCHS= 1000
 
 # Early stopping callback
 PATIENCE = 6
