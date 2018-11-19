@@ -72,10 +72,10 @@ model.add(Dense(32, activation='relu'))
 model.add(Dense(NUM_EMOTION, activation='softmax'))
 
 model.summary()
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-BATCH_SIZE=1000
-EPOCHS= 1000
+BATCH_SIZE=100
+EPOCHS= 600
 
 # Early stopping callback
 PATIENCE = 6
