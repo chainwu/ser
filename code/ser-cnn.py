@@ -17,11 +17,11 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Image processing
-IMAGE_PATH='../test-images'
+IMAGE_PATH='../narrow'
 
 # 5 emotional categories
 NUM_EMOTION=5
-SER_H5="ser-2.h5"
+SER_H5="ser-narrow.h5"
 
 image_input_files = sorted(glob.glob(path.join(IMAGE_PATH, '*.jpg')))
 images = [imageio.imread(im) for im in image_input_files]
@@ -35,7 +35,7 @@ print(image_size)
 images = images/256
 
 for i in range(1, n_images):
-     labels[i] = int(i / 3)
+   labels[i] = int(i / 3)
 
 labels_encoded=to_categorical(labels)
 print(labels_encoded)
@@ -50,18 +50,22 @@ y_train = labels_encoded[:]
 model = Sequential()
 
 # 1st layer
-model.add(Conv2D(filters = 64, kernel_size = (5,5), strides = (3,3), padding = 'same', input_shape = (180,1500,3), activation = 'relu'))
-model.add(MaxPooling2D(pool_size=(3,3)))
+#model.add(Conv2D(filters = 64, kernel_size = (5,5), strides = (3,3), padding = 'same', input_shape = (180,1500,3), activation = 'relu'))
+model.add(Conv2D(filters = 64, kernel_size = (5,5), strides = (3,3), padding = 'same', input_shape = (200,900,3), activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(3,3),dim_ordering="th"))
+model.add(Dropout(0.2))
+
+model.add(MaxPooling2D(pool_size=(3,3),dim_ordering="th"))
 model.add(Dropout(0.2))
 
 #2nd layer
 model.add(Conv2D(128, kernel_size = (3,3), strides = (2,2), padding = 'same', activation = 'relu'))
-model.add(MaxPooling2D(pool_size=(3,3)))
+model.add(MaxPooling2D(pool_size=(3,3),dim_ordering="th"))
 model.add(Dropout(0.2))
 
 #3rd layer
 model.add(Conv2D(256, kernel_size = (3,3), strides = (1,1), padding = 'same', activation = 'relu'))
-model.add(MaxPooling2D(pool_size=(3,3)))
+model.add(MaxPooling2D(pool_size=(3,3),dim_ordering="th"))
 model.add(Dropout(0.2))
 
 model.add(Flatten())

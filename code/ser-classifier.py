@@ -8,7 +8,7 @@ import numpy as np
 
 from keras.models import load_model
 
-SER_MODEL = 'ser-2.h5'
+SER_MODEL = 'ser-narrow.h5'
 images=[]
 test_predictions = None
 
